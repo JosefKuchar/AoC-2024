@@ -7,8 +7,8 @@ fn get_lists(input: &str) -> (Vec<u32>, Vec<u32>) {
         .lines()
         .flat_map(|line| line.split_whitespace().map(|x| x.parse::<u32>().unwrap()))
         .collect();
-    let left = numbers.iter().step_by(2).map(|x| *x).collect();
-    let right = numbers.iter().skip(1).map(|x| *x).step_by(2).collect();
+    let left = numbers.iter().step_by(2).copied().collect();
+    let right = numbers.iter().skip(1).step_by(2).copied().collect();
 
     (left, right)
 }

@@ -6,20 +6,19 @@ fn is_ok(sequence: &[i32]) -> bool {
     sequence
         .windows(2)
         .map(|x| x[0] - x[1])
-        .fold(Some(Ordering::Equal), |acc, x| {
+        .try_fold(Ordering::Equal, |acc, x| {
             let ord = x.cmp(&0);
             if x.abs() >= 1 && x.abs() <= 3 {
                 match acc {
-                    Some(Ordering::Equal) => Some(ord),
-                    Some(Ordering::Less) => match ord {
+                    Ordering::Equal => Some(ord),
+                    Ordering::Less => match ord {
                         Ordering::Less => Some(Ordering::Less),
                         _ => None,
                     },
-                    Some(Ordering::Greater) => match ord {
+                    Ordering::Greater => match ord {
                         Ordering::Greater => Some(Ordering::Greater),
                         _ => None,
                     },
-                    None => None,
                 }
             } else {
                 None
@@ -43,7 +42,7 @@ pub fn part_one(input: &str) -> Option<u32> {
     Some(
         parse_input(input)
             .iter()
-            .map(|line| is_ok(&line))
+            .map(|line| is_ok(line))
             .filter(|x| *x)
             .count() as u32,
     )
@@ -54,7 +53,7 @@ pub fn part_two(input: &str) -> Option<u32> {
         parse_input(input)
             .iter()
             .map(|line| {
-                let mut ok = is_ok(&line);
+                let mut ok = is_ok(line);
                 for i in 0..line.len() {
                     let mut line = line.clone();
                     line.remove(i);
