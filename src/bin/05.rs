@@ -2,7 +2,7 @@ use itertools::Itertools;
 
 advent_of_code::solution!(5);
 
-fn check_order(ordering: &Vec<(u32, u32)>, update: &Vec<u32>) -> bool {
+fn check_order(ordering: &[(u32, u32)], update: &[u32]) -> bool {
     ordering.iter().all(|order| {
         let first = update.iter().find_position(|x| x == &&order.0);
         let second = update.iter().find_position(|x| x == &&order.1);
