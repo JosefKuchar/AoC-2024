@@ -58,8 +58,10 @@ pub fn part_two(input: &str) -> Option<u32> {
         visited
             .par_iter()
             .filter(|pos| {
-                if pos.0 == start.0 && pos.1 == start.1 {
-                    false;
+                if (pos.0 == start.0 && pos.1 == start.1)
+                    || map[pos.0 as usize][pos.1 as usize] == '#'
+                {
+                    return false;
                 }
                 let mut map = map.clone();
                 map[pos.0 as usize][pos.1 as usize] = '#';
