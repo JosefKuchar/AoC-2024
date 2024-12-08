@@ -32,7 +32,7 @@ fn solve(input: &str, skip: usize) -> Option<u64> {
                     .multi_cartesian_product()
                     .any(|c| {
                         let mut c = c.into_iter();
-                        numbers.iter().map(|x| *x).reduce(|acc, n| {
+                        numbers.iter().copied().reduce(|acc, n| {
                             let op = c.next().unwrap();
                             match op {
                                 Operation::Add => acc + n,

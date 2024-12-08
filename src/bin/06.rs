@@ -5,11 +5,11 @@ advent_of_code::solution!(6);
 
 const DIRS: [(isize, isize); 4] = [(-1, 0), (0, 1), (1, 0), (0, -1)];
 
-fn in_bounds(map: &Vec<Vec<char>>, pos: (isize, isize)) -> bool {
+fn in_bounds(map: &[Vec<char>], pos: (isize, isize)) -> bool {
     pos.0 >= 0 && pos.1 >= 0 && pos.0 < map.len() as isize && pos.1 < map[0].len() as isize
 }
 
-fn check_map(map: &Vec<Vec<char>>, start: (isize, isize)) -> (bool, Vec<(isize, isize)>) {
+fn check_map(map: &[Vec<char>], start: (isize, isize)) -> (bool, Vec<(isize, isize)>) {
     let mut visited: HashSet<(isize, isize)> = HashSet::new();
     let mut visited_dir: HashSet<((isize, isize), usize)> = HashSet::new();
     let mut dir = 0;
@@ -22,7 +22,7 @@ fn check_map(map: &Vec<Vec<char>>, start: (isize, isize)) -> (bool, Vec<(isize, 
         visited_dir.insert((current, dir));
         let next = (current.0 + DIRS[dir].0, current.1 + DIRS[dir].1);
         if !in_bounds(map, next) {
-            return (false, visited.iter().map(|x| *x).collect());
+            return (false, visited.iter().copied().collect());
         }
         if map[next.0 as usize][next.1 as usize] == '#' {
             dir = (dir + 1) % 4;
@@ -35,9 +35,9 @@ fn check_map(map: &Vec<Vec<char>>, start: (isize, isize)) -> (bool, Vec<(isize, 
 fn parse_input(input: &str) -> (Vec<Vec<char>>, (isize, isize)) {
     let map: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
     let mut start: (isize, isize) = (0, 0);
-    for i in 0..map.len() {
-        for j in 0..map[i].len() {
-            if map[i][j] == '^' {
+    for (i, row) in map.iter().enumerate() {
+        for (j, cell) in row.iter().enumerate() {
+            if *cell == '^' {
                 start = (i as isize, j as isize);
             }
         }

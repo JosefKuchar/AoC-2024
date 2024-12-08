@@ -2,17 +2,17 @@ use std::collections::HashSet;
 
 advent_of_code::solution!(8);
 
-fn in_bounds(map: &Vec<Vec<char>>, pos: (i32, i32)) -> bool {
+fn in_bounds(map: &[Vec<char>], pos: (i32, i32)) -> bool {
     pos.0 >= 0 && pos.1 >= 0 && pos.0 < map.len() as i32 && pos.1 < map[0].len() as i32
 }
 
 pub fn solve<R: IntoIterator<Item = i32> + Clone>(input: &str, range: R) -> Option<u32> {
     let map: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
     let mut antennas: Vec<((usize, usize), char)> = Vec::new();
-    for i in 0..map.len() {
-        for j in 0..map[i].len() {
-            if map[i][j] != '.' {
-                antennas.push(((i, j), map[i][j]));
+    for (i, row) in map.iter().enumerate() {
+        for (j, cell) in row.iter().enumerate() {
+            if *cell != '.' {
+                antennas.push(((i, j), *cell));
             }
         }
     }
