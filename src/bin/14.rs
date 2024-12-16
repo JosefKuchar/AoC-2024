@@ -3,6 +3,7 @@ use std::{
     collections::{HashMap, HashSet},
 };
 
+use pathfinding::matrix::directions::S;
 use regex::Regex;
 
 advent_of_code::solution!(14);
@@ -76,30 +77,36 @@ pub fn part_two(input: &str) -> Option<u32> {
             robot.position.1 = robot.position.1.rem_euclid(height);
         }
 
-        let robot_positions: HashSet<(i32, i32)> = robots.iter().map(|r| r.position).collect();
-        let symetric = robot_positions
-            .iter()
-            .filter(|(x, y)| robot_positions.contains(&(width - 1 - x, *y)))
-            .count();
-        if symetric > symetric_max_count {
-            symetric_max_count = symetric;
-            seconds = i + 1;
-            // for y in 0..height {
-            //     for x in 0..width {
-            //         let mut found = false;
-            //         for robot in robots.iter() {
-            //             if robot.position == (x, y) {
-            //                 found = true;
-            //                 break;
-            //             }
-            //         }
-            //         print!("{}", if found { '#' } else { '.' });
-            //     }
-            //     println!();
-            // }
-            // println!("Seconds: {}", i + 1);
+        let mut found = false;
+        let mut robot_positions: HashSet<(i32, i32)> = HashSet::new();
+        for robot in robots.iter() {
+            if robot_positions.contains(&robot.position) {
+                found = true;
+                break;
+            }
+            robot_positions.insert(robot.position);
         }
+        if found {
+            continue;
+        }
+        seconds = i;
+
+        for y in 0..height {
+            for x in 0..width {
+                let mut found = false;
+                for robot in robots.iter() {
+                    if robot.position == (x, y) {
+                        found = true;
+                        break;
+                    }
+                }
+                print!("{}", if found { '#' } else { '.' });
+            }
+            println!();
+        }
+        println!("Seconds: {}", i + 1);
     }
+
     Some(seconds)
 }
 
